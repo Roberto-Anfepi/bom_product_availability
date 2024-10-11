@@ -39,8 +39,8 @@ class MRPProduction(models.Model):
         for record in self:
             record.product_count = ''
             product_id = record.bom_id.bom_line_ids.mapped('product_id')
-            bom_quantity = record.bom_id.bom_line_ids.mapped('free_qty')
-            product_quantity = [products.qty_available for products in
+            bom_quantity = record.bom_id.bom_line_ids.mapped('product_qty')
+            product_quantity = [products.free_qty for products in
                                 product_id]
             product_count_min = []
             for bom_quant, product_quant in zip(bom_quantity, product_quantity):
