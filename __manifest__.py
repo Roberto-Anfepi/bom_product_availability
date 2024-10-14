@@ -34,6 +34,7 @@
     'depends': ['mrp', 'product', 'stock'],
     'data': [
         'views/mrp_production_views.xml',
+        'views/mrp_production_views.xml'
     ],
     'images': ['static/description/banner.jpg'],
     'license': 'LGPL-3',

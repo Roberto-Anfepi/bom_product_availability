@@ -3,14 +3,13 @@ from odoo import models, fields, api, _
 
 class MRPProduction(models.Model):
     """Available products that can be made using Bill of Materials"""
-    _inherit = "mrp.production"
-
+    _inherit = "mrp.bom"
+    
     product_count = fields.Integer(string="Available Quantity",
                                    compute="_compute_product_count",
                                    help="Number of products that can be made "
                                         "using available BOMs.")
-    check_quant = fields.Boolean(string="Check Quantity",
-                                 help="To check before warning message")
+
 
     @api.depends('product_id')
     def _compute_product_count(self):
@@ -27,19 +26,5 @@ class MRPProduction(models.Model):
                 product_count_min.append(available_quantity)
             if 0 in product_quantity:
                 record.product_count = 0
-                record.check_quant = True
             elif len(product_count_min) != 0:
                 record.product_count = min(product_count_min)
-
-    @api.onchange('bom_id')
-    def _onchange_product_count(self):
-        """If available quantity of product is zero show warning message """
-        if self.check_quant and self.product_count == 0:
-            return {
-                'warning': {
-                    'title': (_('Warning')),
-                    'message': (_(
-                        'There is no available BOM quantities to '
-                        'complete the manufacture')),
-                }
-            }
